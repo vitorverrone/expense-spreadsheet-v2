@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "setup-project": "npm i && cd client && npm i",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "deploy": "cd client && npm run build && cd .. && npm run dev"
   },
   "author": "",
   "license": "ISC",
