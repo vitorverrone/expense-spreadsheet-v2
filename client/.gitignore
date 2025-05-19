@@ -10,6 +10,9 @@
 .history/
 .node_modules/
 .env
+.dist/
+dist/
+dist
 package-lock.json
 
 # Built Visual Studio Code Extensions
