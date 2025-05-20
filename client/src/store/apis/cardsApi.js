@@ -3,7 +3,7 @@ import axios from "axios";
 let baseUrl = `${location.protocol}//${location.hostname}:3005/api/v1`;
 
 if (location.hostname !== 'localhost') {
-    baseUrl = `https://expense-spreadsheet-v2.onrender.com:3005/api/v1`;
+    baseUrl = `https://expense-spreadsheet-v2.onrender.com/api/v1`;
 }
 
 const api = axios.create({ baseURL: baseUrl, /* headers : {'Authorization' : `Bearer ${apiToken}`} */ });
