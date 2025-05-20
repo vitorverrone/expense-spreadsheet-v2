@@ -90,16 +90,16 @@ export function BillsList ({ userId }) {
                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {bill.title}
                             </th>
-                            <td className="px-6 py-4 text-center">
+                            <td className="hidden md:table-cell px-6 py-4 text-center">
                                 {recurrentBill ? '-' : bill.installments}
                             </td>
                             <td className="px-6 py-4 text-center">
                                 {installmentValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                             </td>
-                            <td className="px-6 py-4 text-center">
+                            <td className="hidden md:table-cell px-6 py-4 text-center">
                                 {recurrentBill ? 'Sim' : 'Não'}
                             </td>
-                            <td className="px-6 py-4 text-center">
+                            <td className="hidden md:table-cell px-6 py-4 text-center">
                                 {recurrentBill ? '-' : (new Date(bill.finalDate).toLocaleString('default', { month: 'long' })) + ' / ' + new Date(bill.finalDate).getFullYear()}
                             </td>
                             <td className="px-6 py-4 text-center">
@@ -118,7 +118,10 @@ export function BillsList ({ userId }) {
             <DeleteBillModal show={showDeleteBillModal} setShow={setShowDeleteBillModal} billId={deleteBillId} />
 
             <div className="flex items-center justify-between mb-4">
-                <p className="text-3xl font-bold dark:text-white">Suas contas do mês de {month} / {today.getFullYear()}</p>
+                <p className="flex gap-2 text-3xl font-bold dark:text-white">
+                    <span className="hidden md:block">Suas contas do mês de </span>
+                    <span className="capitalize">{month}</span> / {today.getFullYear()}
+                </p>
 
 
                 <div className="flex items-center gap-3">
@@ -134,7 +137,7 @@ export function BillsList ({ userId }) {
             </div>
 
             {showFilterBar && <div className="my-5 items-center flex gap-5 overflow-hidden">
-                <div className="relative w-[50%]">
+                <div className="relative w-full">
                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                         <GoSearch />
                     </div>
@@ -149,18 +152,18 @@ export function BillsList ({ userId }) {
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" className="px-6 py-3">
-                                Nome da conta
+                                Conta
                             </th>
-                            <th scope="col" className="px-6 py-3 text-center">
+                            <th scope="col" className="hidden md:table-cell px-6 py-3 text-center">
                                 Quantidade de parcelas
                             </th>
                             <th scope="col" className="px-6 py-3 text-center">
-                                Valor por mês
+                                Valor / mês
                             </th>
-                            <th scope="col" className="px-6 py-3 text-center">
+                            <th scope="col" className="hidden md:table-cell px-6 py-3 text-center">
                                 Recorrente
                             </th>
-                            <th scope="col" className="px-6 py-3 text-center">
+                            <th scope="col" className="hidden md:table-cell px-6 py-3 text-center">
                                 Finaliza em
                             </th>
                             <th scope="col" className="px-6 py-3"></th>
@@ -177,7 +180,10 @@ export function BillsList ({ userId }) {
                     <GoPlus />
                 </button>
 
-                <h3 className="text-3xl font-bold dark:text-white text-right">Total do mês: {monthTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</h3>
+                <h3 className="flex gap-5 text-3xl font-bold dark:text-white text-right">
+                    <span className="hidden md:block">Total do mês: </span>
+                    {monthTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </h3>
             </div>
         </>
     )
