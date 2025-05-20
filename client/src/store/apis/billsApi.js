@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'http://localhost:3005/api/v1';
+const baseUrl = `${location.protocol}//${location.hostname}:3005/api/v1`;
 
 const api = axios.create({ baseURL: baseUrl, /* headers : {'Authorization' : `Bearer ${apiToken}`} */ });
 
