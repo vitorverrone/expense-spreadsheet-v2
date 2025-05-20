@@ -6,7 +6,8 @@
   "scripts": {
     "setup-project": "npm i && cd client && npm i",
     "dev": "nodemon server.js",
-    "deploy": "cd client && npm run build && cd .. && npm run dev"
+    "start": "node --no-warnings server.js",
+    "deploy": "cd client && npm run build && cd .. && npm run start"
   },
   "author": "",
   "license": "ISC",
