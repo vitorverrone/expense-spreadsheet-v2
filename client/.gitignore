@@ -13,6 +13,9 @@
 .dist/
 dist/
 dist
+.public/
+public/
+public
 package-lock.json
 
 # Built Visual Studio Code Extensions
