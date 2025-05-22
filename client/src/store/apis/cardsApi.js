@@ -1,11 +1,8 @@
 import axios from "axios";
 
-let baseUrl = `${location.protocol}//${location.hostname}:3005/api/v1`;
+const baseUrl = import.meta.env.MODE === 'production' ? import.meta.VITE_PROD_URL : `${location.protocol}//${location.hostname}:3005/api/v1`;
 
-if (import.meta.env.MODE === 'production') {
-    console.log('entrou aqui no if');
-    baseUrl = import.meta.VITE_PROD_URL;
-}
+console.log('baseUrl', baseUrl);
 
 const api = axios.create({ baseURL: baseUrl, /* headers : {'Authorization' : `Bearer ${apiToken}`} */ });
 
