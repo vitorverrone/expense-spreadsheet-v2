@@ -24,7 +24,6 @@ function CardsModal ({ userId, show, setShow }) {
     let { isFetching, isPending, error, data } = useQuery({
         queryKey: ['fetchcards'],
         queryFn: () => fetchCards(userId),
-        enabled: !!show
     });
 
     const handleSubmit = (e) => {

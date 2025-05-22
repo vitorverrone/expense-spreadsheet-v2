@@ -56,7 +56,7 @@ export function AddBillFormModal ({ show, setShow, userId }) {
 
         const today = new Date();
         const date = new Date(billDate);
-        const finalDate = new Date(billType === 'installment' ? Date(date).setMonth(date.getMonth() + Number(billInstallments)) : today).toISOString().split('T')[0];
+        const finalDate = new Date(billType === 'installment' ? new Date(date).setMonth(date.getMonth() + Number(billInstallments)) : today).toISOString().split('T')[0];
 
         const bill = {
             title: billName,
