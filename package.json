@@ -7,8 +7,7 @@
     "setup-project": "npm i && cd client && npm i",
     "dev": "nodemon server.js",
     "start": "node --no-warnings server.js",
-    "prepare-env": "cp .env client/.env",
-    "deploy": "npm run prepare-env && cd client && npm run build"
+    "deploy": "cd client && npm run build && cd .. && npm run start"
   },
   "author": "",
   "license": "ISC",
