@@ -63,13 +63,13 @@ export function BillsList ({ userId }) {
             <td className="px-6 py-4">
                 <Skeleton className="w-full h-8" />
             </td>
-            <td className="px-6 py-4">
+            <td className="hidden md:table-cell px-6 py-4">
                 <Skeleton className="w-full h-8" />
             </td>
-            <td className="px-6 py-4">
+            <td className="hidden md:table-cell px-6 py-4">
                 <Skeleton className="w-full h-8" />
             </td>
-            <td className="px-6 py-4">
+            <td className="hidden md:table-cell px-6 py-4">
                 <Skeleton className="w-full h-8" />
             </td>
         </tr>

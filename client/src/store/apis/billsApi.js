@@ -4,7 +4,7 @@ import axios from "axios";
 let baseUrl = `${location.protocol}//${location.hostname}:3005/api/v1`;
 
 if (location.hostname !== 'localhost') {
-    baseUrl = `https://expense-spreadsheet-v2.onrender.com/api/v1`;
+    baseUrl = import.meta.VITE_PROD_URL;
 }
 
 const api = axios.create({ baseURL: baseUrl, /* headers : {'Authorization' : `Bearer ${apiToken}`} */ });

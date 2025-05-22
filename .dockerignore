@@ -1,0 +1,58 @@
+# flyctl launch added from .gitignore
+### VisualStudioCode ###
+**\.vscode\*
+!**\.vscode\settings.json
+!**\.vscode\tasks.json
+!**\.vscode\launch.json
+!**\.vscode\extensions.json
+!**\.vscode\*.code-snippets
+
+# Local History for Visual Studio Code
+**\.history
+**\node_modules
+**\.env
+**\.dist
+**\dist
+**\dist
+**\.public
+**\public
+**\public
+**\package-lock.json
+
+# Built Visual Studio Code Extensions
+**\*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+**\.history
+**\.ionide
+
+# flyctl launch added from client\.gitignore
+### VisualStudioCode ###
+client\**\.vscode\*
+!client\**\.vscode\settings.json
+!client\**\.vscode\tasks.json
+!client\**\.vscode\launch.json
+!client\**\.vscode\extensions.json
+!client\**\.vscode\*.code-snippets
+
+# Local History for Visual Studio Code
+client\**\.history
+client\**\.node_modules
+client\**\.env
+client\**\.dist
+client\**\dist
+client\**\dist
+client\**\.public
+client\**\public
+client\**\public
+client\**\package-lock.json
+
+# Built Visual Studio Code Extensions
+client\**\*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+client\**\.history
+client\**\.ionide
+fly.toml
