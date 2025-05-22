@@ -6,10 +6,12 @@ import { HiMenu } from "react-icons/hi";
 import UserMenuItem from "./UserMenuItem";
 import Skeleton from "./Skeleton";
 import CardsModal from "./CardsModal";
+import MyDataModal from "./MyDataModal";
 
 function Header({ userId }) {
     const [showMenu, setShowMenu] = useState(false);
     const [showCardsModal, setShowCardsModal] = useState(false);
+    const [showDataModal, setShowDataModal] = useState(false);
 
     let { isFetching, error, data } = useQuery({
         queryKey: ['getUser'],
@@ -17,6 +19,7 @@ function Header({ userId }) {
     });
 
     let cardModal;
+    let dataModal;
     let userMenuItem;
 
     if (isFetching) {
@@ -24,12 +27,14 @@ function Header({ userId }) {
     } else if (error) {
         userMenuItem = <li><Skeleton className="w-[100px] h-[20px]" /></li>
     } else {
+        dataModal = <MyDataModal show={showDataModal} setShow={setShowDataModal} userId={data.user._id} />
         cardModal = <CardsModal show={showCardsModal} setShow={setShowCardsModal} userId={data.user._id} />
-        userMenuItem = <UserMenuItem user={data.user} show={showMenu} setShowMenu={setShowMenu} setShowCardModal={setShowCardsModal} />
+        userMenuItem = <UserMenuItem user={data.user} show={showMenu} setShowMenu={setShowMenu} setShowDataModal={setShowDataModal} setShowCardModal={setShowCardsModal} />
     }
 
     return <>
         {cardModal}
+        {dataModal}
         <nav className="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
             <div className="container mx-auto flex flex-wrap items-center justify-between mx-auto mb-[50px]">
                 <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">

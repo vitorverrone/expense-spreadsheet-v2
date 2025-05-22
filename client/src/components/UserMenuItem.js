@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import className from 'classnames';
 
-function UserMenuItem({ user, setShowCardModal, show, setShowMenu }) {
+function UserMenuItem({ user, setShowCardModal, setShowDataModal, show, setShowMenu }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const handleLogout = () => {
@@ -28,6 +28,11 @@ function UserMenuItem({ user, setShowCardModal, show, setShowMenu }) {
                 {user.name}
                 <hr className='md:hidden mt-4' />
                 <div id="dropdownNavbar" className={classes}>
+                    <div className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownLargeButton">
+                        <p>
+                            <button className="w-full text-left block md:px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => { setShowDataModal(true); setDropdownOpen(false); setShowMenu(false)}}>Meus dados</button>
+                        </p>
+                    </div>
                     <div className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownLargeButton">
                         <p>
                             <button className="w-full text-left block md:px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => { setShowCardModal(true); setDropdownOpen(false); setShowMenu(false)}}>Cartões</button>

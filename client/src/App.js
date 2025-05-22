@@ -20,8 +20,6 @@ function App() {
         Cookies.set('userid', userId, { expires: 7 });
     }
 
-    console.log(import.meta.env)
-
     useEffect(() => {
         if (Cookies.get('userid')) {
             handleLogged(Cookies.get('userid'))

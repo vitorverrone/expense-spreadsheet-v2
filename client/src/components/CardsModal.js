@@ -21,9 +21,10 @@ function CardsModal ({ userId, show, setShow }) {
         }
     });
 
-    let { isFetching, error, data } = useQuery({
+    let { isFetching, isPending, error, data } = useQuery({
         queryKey: ['fetchcards'],
         queryFn: () => fetchCards(userId),
+        enabled: !!show
     });
 
     const handleSubmit = (e) => {
@@ -52,7 +53,7 @@ function CardsModal ({ userId, show, setShow }) {
 
     let content;
 
-    if (isFetching) {
+    if (isFetching || isPending) {
         content = <ul>
             <li><Skeleton className="w-[100px] h-[20px]" /></li>
             <li><Skeleton className="w-[100px] h-[20px]" /></li>
