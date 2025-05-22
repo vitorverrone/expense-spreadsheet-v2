@@ -2,7 +2,8 @@ import axios from "axios";
 
 let baseUrl = `${location.protocol}//${location.hostname}:3005/api/v1`;
 
-if (location.hostname !== 'localhost') {
+if (import.meta.env.MODE === 'production') {
+    console.log('entrou aqui no if');
     baseUrl = import.meta.VITE_PROD_URL;
 }
 
