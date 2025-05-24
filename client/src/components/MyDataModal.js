@@ -61,8 +61,8 @@ function MyDataModal ({ show, setShow }) {
                             <input type="hidden" {...register('_id')} value={data.user._id} />
                             <div className="mb-5 text-left">
                                 <label htmlFor="userNickname" className="block mb-2 text-sm font-medium dark:text-white">Usuário</label>
-                                <InputForm type="text" id="userNickname" {...register('nickname', { required: "O campo usuário é obrigatório" })} defaultValue={data.user.nickname} />
-                                {errors.nickname && <span>{errors.nickname.message}</span>}
+                                <InputForm type="text" id="userNickname" {...register('username', { required: "O campo usuário é obrigatório" })} defaultValue={data.user.username} />
+                                {errors.username && <span>{errors.username.message}</span>}
                             </div>
 
                             <div className="mb-5 text-left">

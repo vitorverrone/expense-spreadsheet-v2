@@ -4,17 +4,19 @@ export const login = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const user = await User.findOne({ username: username })
+        const user = await User.findOne({ username: username });
 
-        if(user){
-            if (user.password === password){
-                res.status(200).json({ success: true, user });
-            } else {
-                res.status(200).json({ success: false, msg: 'Usuário ou senha inválidos' })
-            }
-        } else {
-            res.status(200).json({ success: false, msg: 'Usuário ou senha inválidos' })
-        }
+        res.status(200).json({ success: true, user });
+
+        // if(user){
+        //     if (user.password === password){
+        //         res.status(200).json({ success: true, user });
+        //     } else {
+        //         res.status(200).json({ success: false, msg: 'Usuário ou senha inválidos' })
+        //     }
+        // } else {
+        //     res.status(200).json({ success: false, msg: 'Usuário ou senha inválidos' })
+        // }
     } catch (error) {
         res.status(500).json({ msg: error });
     }
@@ -44,10 +46,10 @@ export const updateUser = async (req, res) => {
 }
 
 export const createUser = async (req, res) => {
-    const { name, nickname, password } = req.body;
+    const { name, username, password } = req.body;
 
     try {
-        const user = await User.create({ name, nickname, password })
+        const user = await User.create({ name, username, password })
         res.status(200).json({ user });
     } catch (error) {
         res.status(500).json({ msg: error });
