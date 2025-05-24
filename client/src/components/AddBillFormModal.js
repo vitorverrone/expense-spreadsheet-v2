@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { GoX } from "react-icons/go";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addBill } from "../store/apis/billsApi";
+import { useForm } from "react-hook-form";
+import { currency } from 'remask';
+
 import className from 'classnames';
 import toast from "react-hot-toast";
 
+import { addBill } from "../store/apis/billsApi";
+import InputForm from "./InputForm";
+
 export function AddBillFormModal ({ show, setShow, userId }) {
-    const [billName, setBillName] = useState('');
-    const [billDate, setBillDate] = useState('');
-    const [billInstallments, setBillInstallments] = useState(0);
-    const [billValue, setbillValue] = useState(0);
-    const [billPlaceholderValue, setBillPlaceholderValue] = useState(0);
-    const [billType, setBillType] = useState('');
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
     const [billCardId, setBillCardId] = useState('');
+    const [billType, setBillType] = useState('');
     const [userCards, setUserCards] = useState([]);
     const billTypes = [
         {
@@ -46,24 +47,21 @@ export function AddBillFormModal ({ show, setShow, userId }) {
         }
     }, [show]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
+    const handleOnSubmit = (data) => {
         if (billCardId === '') {
             toast.error('Selecione qual cartão foi utilizado');
             return;
         }
 
         const today = new Date();
-        const date = new Date(billDate);
-        const finalDate = new Date(billType === 'installment' ? new Date(date).setMonth(date.getMonth() + Number(billInstallments)) : today).toISOString().split('T')[0];
+        const date = new Date(data.billDate);
+        const finalDate = new Date(billType === 'installment' ? new Date(date).setMonth(date.getMonth() + Number(data.installments)) : today).toISOString().split('T')[0];
 
-        const bill = {
-            title: billName,
-            value: billValue,
-            installments: billInstallments,
+        data.value = currency.unmask({ locale: 'pt-BR', currency: 'BRL', value: data.value })
+
+        const bill = {...data,
             billType: billType,
-            buyDate: billDate,
+            buyDate: data.billDate,
             finalDate,
             userId: userId,
             cardId: billCardId
@@ -80,12 +78,6 @@ export function AddBillFormModal ({ show, setShow, userId }) {
         }
     );
 
-    const handleValueChange = (value) => {
-        const formattedValue = value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        setBillPlaceholderValue(formattedValue);
-        setbillValue(value);
-    };
-
     const handleTypeChange = (e) => {
         setBillType(e.target.value);
     };
@@ -93,6 +85,13 @@ export function AddBillFormModal ({ show, setShow, userId }) {
     const handleCardChange = (e) => {
         setBillCardId(e.target.value);
     }
+
+    const handleCurrencyChange = (e) => {
+        const value = e.target.value || 0;
+        const raw = currency.unmask({ locale: 'pt-BR', currency: 'BRL', value: value })
+        const masked = currency.mask({ locale: 'pt-BR', currency: 'BRL', value: raw })
+        setValue('value', masked);
+    };
 
     return (
         <div id="default-modal" tabIndex="-1" aria-hidden="true" className={classes}>
@@ -109,15 +108,23 @@ export function AddBillFormModal ({ show, setShow, userId }) {
                     </div>
 
                     <div className="p-4 md:p-5 space-y-4">
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit(handleOnSubmit)}>
                             <div className="mb-5">
-                                <label htmlFor="billName" className="block mb-2 text-sm font-medium dark:text-white">Nome da conta</label>
-                                <input type="text" id="billName" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Ex: Conta de Luz" required value={billName} onChange={e => setBillName(e.target.value)} />
+                                <label htmlFor="title" className="block mb-2 text-sm font-medium dark:text-white">Nome da conta</label>
+                                <InputForm type="text" id="title" placeholder="Ex: Conta de Luz" {...register('title', { required: "O campo nome é obrigatório" })} />
+                                {errors.title && <span>{errors.title.message}</span>}
                             </div>
 
                             <div className="mb-5">
-                                <label htmlFor="billValue" className="block mb-2 text-sm font-medium dark:text-white">Valor da conta</label>
-                                <input type="text" id="billValue" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="R$ 200,00" required value={billPlaceholderValue} onChange={e => handleValueChange(e.target.value)} />
+                                <label htmlFor="value" className="block mb-2 text-sm font-medium dark:text-white">Valor da conta</label>
+                                <InputForm type="text" id="value" placeholder="R$ 200,00" {...register('value', { required: "O campo valor é obrigatório" })} onChange={handleCurrencyChange} />
+                                {errors.value && <span>{errors.value.message}</span>}
+                            </div>
+
+                            <div className="mb-5">
+                                <label htmlFor="billDate" className="block mb-2 text-sm font-medium dark:text-white">Data da compra</label>
+                                <InputForm type="date" id="billDate" placeholder="Ex: Conta de Luz" {...register('billDate', { required: "O campo data é obrigatório" })} />
+                                {errors.billDate && <span>{errors.billDate.message}</span>}
                             </div>
 
                             <div className="mb-5">
@@ -152,13 +159,9 @@ export function AddBillFormModal ({ show, setShow, userId }) {
                             </div>
 
                             {billType === 'installment' && (<div className="mb-5">
-                                <label htmlFor="billDate" className="block mb-2 text-sm font-medium dark:text-white">Data da compra</label>
-                                <input type="date" id="billDate" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required value={billDate} onChange={e => setBillDate(e.target.value)} />
-                            </div>)}
-
-                            {billType === 'installment' && (<div className="mb-5">
-                                <label htmlFor="billInstallments" className="block mb-2 text-sm font-medium dark:text-white">Parcelas</label>
-                                <input type="number" id="billInstallments" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="5" required value={billInstallments} onChange={e => setBillInstallments(e.target.value)} />
+                                <label htmlFor="installments" className="block mb-2 text-sm font-medium dark:text-white">Parcelas</label>
+                                <InputForm type="number" id="installments" placeholder="Ex: Conta de Luz" {...register('installments', { required: "O campo parcelas é obrigatório" })} />
+                                {errors.installments && <span>{errors.installments.message}</span>}
                             </div>)}
 
                             <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Adicionar</button>

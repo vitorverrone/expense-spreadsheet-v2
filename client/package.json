@@ -30,13 +30,14 @@
     "json-server": "^1.0.0-beta.3",
     "oslllo-svg-fixer": "^5.0.0",
     "postcss": "^8.4.18",
+    "primereact": "^10.9.5",
     "react": "18.3.1",
-    "react-currency-mask": "^1.3.3",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.56.4",
     "react-hot-toast": "^2.5.2",
     "react-icons": "4.6.0",
     "react-redux": "^9.2.0",
+    "remask": "^1.2.2",
     "tailwindcss": "^4.0.7",
     "vite": "^5.4.19"
   }

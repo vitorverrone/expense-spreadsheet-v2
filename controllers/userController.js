@@ -31,6 +31,18 @@ export const getUser = async (req, res) => {
     }
 }
 
+export const updateUser = async (req, res) => {
+    const { id } = req.params;
+    const userData = req.body;
+
+    try {
+        const user = await User.findByIdAndUpdate(id, userData);
+        res.status(200).json({ user })
+    } catch (error) {
+        res.status(500).json({ msg: error });
+    }
+}
+
 export const createUser = async (req, res) => {
     const { name, nickname, password } = req.body;
 

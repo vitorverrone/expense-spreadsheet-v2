@@ -12,6 +12,10 @@ export const addUser = async (user) => {
     await api.post("/users", user).then(res => res.data);
 }
 
+export const updateUser = async (user) => {
+    await api.patch(`/users/${user._id}`, user).then(res => res.data);
+}
+
 export const getUser = async (userId) => {
     return await api.get(`/users/${userId}`).then((res) => res.data)
 }

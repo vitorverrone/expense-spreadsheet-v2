@@ -1,13 +1,25 @@
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { GoX } from "react-icons/go";
+import { currency } from 'remask';
 import className from 'classnames';
 
-function MyDataModal ({ userId, show, setShow }) {
-    const queryClient = useQueryClient();
-    const { register, handleSubmit, formState: { errors } } = useForm();
+import { updateUser } from "../store/apis/usersApi";
+import InputForm from "./InputForm";
 
-    const classes = className(
+function MyDataModal ({ show, setShow }) {
+    const queryClient = useQueryClient();
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
+
+    const { mutate, isLoading } = useMutation({
+        mutationFn: updateUser,
+        onSuccess: () => {
+            setShow(false);
+            queryClient.invalidateQueries({ queryKey: ['getUser'] })
+        }
+    });
+
+    const modalClasses = className(
         'overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full',
         {
             'flex': show,
@@ -15,16 +27,23 @@ function MyDataModal ({ userId, show, setShow }) {
         }
     );
 
-    const inputClasses = 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500';
-
     const handleOnSubmit = (data) => {
-        console.log(data);
+        data.salary = currency.unmask({ locale: 'pt-BR', currency: 'BRL', value: data.salary })
+        mutate(data);
+    };
+
+    const handleCurrencyChange = (e) => {
+        const value = e.target.value || 0;
+        const raw = currency.unmask({ locale: 'pt-BR', currency: 'BRL', value: value })
+        const masked = currency.mask({ locale: 'pt-BR', currency: 'BRL', value: raw })
+        setValue('salary', masked);
     };
 
     const data = queryClient.getQueryData(['getUser']);
+    data.user.salary = currency.mask({ locale: 'pt-BR', currency: 'BRL', value: data.user.salary })
 
     return (
-        <div id="default-modal" tabIndex="-1" aria-hidden="true" className={classes}>
+        <div id="default-modal" tabIndex="-1" aria-hidden="true" className={modalClasses}>
             <div className="relative p-4 w-full max-w-2xl max-h-full">
                 <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
                     <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
@@ -39,21 +58,22 @@ function MyDataModal ({ userId, show, setShow }) {
 
                     <div className="p-4 md:p-5 space-y-4 text-center">
                         <form onSubmit={handleSubmit(handleOnSubmit)}>
+                            <input type="hidden" {...register('_id')} value={data.user._id} />
                             <div className="mb-5 text-left">
                                 <label htmlFor="userNickname" className="block mb-2 text-sm font-medium dark:text-white">Usuário</label>
-                                <input type="text" id="userNickname" className={inputClasses} {...register('nickname', { required: "O campo usuário é obrigatório" })} value={data.user.nickname} />
+                                <InputForm type="text" id="userNickname" {...register('nickname', { required: "O campo usuário é obrigatório" })} defaultValue={data.user.nickname} />
                                 {errors.nickname && <span>{errors.nickname.message}</span>}
                             </div>
 
                             <div className="mb-5 text-left">
                                 <label htmlFor="userEmail" className="block mb-2 text-sm font-medium dark:text-white">E-mail</label>
-                                <input type="email" id="userEmail" className={inputClasses} {...register('email', { required: "O campo email é obrigatório" })} value={data.user.email} />
+                                <InputForm type="email" id="userEmail" {...register('email', { required: "O campo email é obrigatório" })} defaultValue={data.user.email} />
                                 {errors.email && <span>{errors.email.message}</span>}
                             </div>
 
                             <div className="mb-5 text-left">
                                 <label htmlFor="userSalary" className="block mb-2 text-sm font-medium dark:text-white">Salario</label>
-                                <input type="number" id="userSalary" className={inputClasses} {...register('salary')} value={data.user.salary} />
+                                <InputForm type="text" id="userSalary" {...register('salary')} defaultValue={data.user.salary} onChange={handleCurrencyChange} />
                             </div>
 
                             <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Salvar</button>

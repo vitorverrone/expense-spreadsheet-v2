@@ -27,7 +27,7 @@ function Header({ userId }) {
     } else if (error) {
         userMenuItem = <li><Skeleton className="w-[100px] h-[20px]" /></li>
     } else {
-        dataModal = <MyDataModal show={showDataModal} setShow={setShowDataModal} userId={data.user._id} />
+        dataModal = <MyDataModal show={showDataModal} setShow={setShowDataModal} />
         cardModal = <CardsModal show={showCardsModal} setShow={setShowCardsModal} userId={data.user._id} />
         userMenuItem = <UserMenuItem user={data.user} show={showMenu} setShowMenu={setShowMenu} setShowDataModal={setShowDataModal} setShowCardModal={setShowCardsModal} />
     }
