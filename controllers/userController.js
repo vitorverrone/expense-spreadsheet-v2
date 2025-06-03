@@ -6,17 +6,15 @@ export const login = async (req, res) => {
     try {
         const user = await User.findOne({ username: username });
 
-        res.status(200).json({ success: true, user });
-
-        // if(user){
-        //     if (user.password === password){
-        //         res.status(200).json({ success: true, user });
-        //     } else {
-        //         res.status(200).json({ success: false, msg: 'Usuário ou senha inválidos' })
-        //     }
-        // } else {
-        //     res.status(200).json({ success: false, msg: 'Usuário ou senha inválidos' })
-        // }
+        if(user){
+            if (user.password === password){
+                res.status(200).json({ success: true, user });
+            } else {
+                res.status(200).json({ success: false, msg: 'Usuário ou senha inválidos' })
+            }
+        } else {
+            res.status(200).json({ success: false, msg: 'Usuário ou senha inválidos' })
+        }
     } catch (error) {
         res.status(500).json({ msg: error });
     }

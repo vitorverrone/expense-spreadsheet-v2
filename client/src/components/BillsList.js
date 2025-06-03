@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { MdArrowForwardIos, MdArrowBackIos, MdOutlineRemoveRedEye } from "react-icons/md";
@@ -18,6 +18,7 @@ import Skeleton from "./Skeleton";
 */
 
 export function BillsList ({ userId }) {
+    const queryClient = useQueryClient();
     const today = new Date();
     const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
     const [filterSearch, setFilterSearch] = useState('');
@@ -26,6 +27,8 @@ export function BillsList ({ userId }) {
     const [deleteBillId, setDeleteBillId] = useState(0);
     const [showAddBillModal, setShowAddBillModal] = useState(false);
     const [showFilterBar, setShowFilterBar] = useState(false);
+    const userData = queryClient.getQueryData(['getUser']);
+    console.log('userData', userData)
 
     let content;
     let monthTotal = 0;
@@ -49,6 +52,10 @@ export function BillsList ({ userId }) {
 
     const handleChangeFilterSearch = (e) => {
         setFilterSearch(e.target.value);
+    }
+
+    const showSubtractionTotal = () => {
+        return (userData?.user.salary - monthTotal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     }
 
     if (isFetching) {
@@ -175,14 +182,14 @@ export function BillsList ({ userId }) {
                 </table>
             </div>
 
-            <div className="fixed left-0 z-10 bottom-0 w-full container mx-auto flex items-center justify-between dark:bg-gray-900 p-5 shadow-xl">
+            <div className="fixed left-[50%] z-10 bottom-0 w-full container mx-auto flex items-center justify-between dark:bg-gray-900 p-5 shadow-xl" style={{transform: 'translateX(-50%)'}}>
                 <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={() => setShowAddBillModal(true)}>
                     <GoPlus />
                 </button>
 
                 <h3 className="flex gap-5 text-3xl font-bold dark:text-white text-right">
-                    <span className="hidden md:block">Total do mês: </span>
-                    {monthTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    <span className="hidden md:block">{userData?.user.salarySubtraction ? 'Saldo' : 'Total'} do mês:</span>
+                    {userData?.user.salarySubtraction ? showSubtractionTotal() : monthTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                 </h3>
             </div>
         </>
