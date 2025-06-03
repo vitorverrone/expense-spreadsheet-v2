@@ -9,20 +9,20 @@ import Loading from "./Loading";
 function Login ({ setIsLogged }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [loginTimeOut, setloginTimeOut] = useState();
 
     const mutation = useMutation({
         mutationKey: ['login'],
         mutationFn: login,
         onSuccess: (data) => {
-            clearTimeout(loginTimeOut);
-
             if (data.success) {
                 setIsLogged(data.user._id);
             } else {
                 toast.error(data.msg);
             }
         },
+        onError: () => {
+            toast.error('Não foi possivel realizar o login neste momento, tente novamente mais tarde');
+        }
     });
 
     const handleSubmit = async (e) => {
@@ -34,10 +34,6 @@ function Login ({ setIsLogged }) {
         }
 
         mutation.mutate(user);
-
-        setloginTimeOut(setTimeout(() => {
-            toast.error('Sistema inicializando, por favor tente novamente em alguns minutos...');
-        }, 3000))
     };
 
     return (
